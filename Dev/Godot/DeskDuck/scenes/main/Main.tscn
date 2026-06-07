@@ -1,11 +1,15 @@
 [gd_scene format=3 uid="uid://3t201wi6mhps"]
 
 [ext_resource type="Script" uid="uid://bw57q3dgyrip" path="res://scripts/main/Main.gd" id="1_0wfyh"]
-[ext_resource type="Texture2D" uid="uid://drnxrv602x0vd" path="res://icon.svg" id="2_sugp2"]
+[ext_resource type="Texture2D" uid="uid://dv5xatox8aa3f" path="res://assets/characters/nova/idle.png" id="3_gyg6b"]
+[ext_resource type="PackedScene" uid="uid://duc42aeaxevqb" path="res://scenes/ui/TaskPanel.tscn" id="3_q24mn"]
 
 [node name="Main" type="Node2D" unique_id=544002195]
 script = ExtResource("1_0wfyh")
 
+[node name="TaskPanel" parent="." unique_id=210172964 instance=ExtResource("3_q24mn")]
+
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1317044676]
-position = Vector2(200, 200)
-texture = ExtResource("2_sugp2")
+position = Vector2(330, 250)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_gyg6b")
