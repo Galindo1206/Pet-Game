@@ -1,0 +1,42 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="DeskDuck"
+run/main_scene="uid://3t201wi6mhps"
+config/features=PackedStringArray("4.6", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+PlayerManager="*uid://cswrehmeah275"
+SaveManager="*uid://ddjkdmhna1vdq"
+TaskManager="*res://scripts/managers/TaskManager.gd"
+
+[display]
+
+window/size/viewport_width=400
+window/size/viewport_height=400
+window/size/resizable=false
+window/size/borderless=true
+window/size/always_on_top=true
+window/stretch/mode="canvas_items"
+window/per_pixel_transparency/allowed=true
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
+
+[rendering]
+
+rendering_device/driver.windows="d3d12"
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
