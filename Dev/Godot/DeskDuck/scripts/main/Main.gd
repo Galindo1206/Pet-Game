@@ -2,6 +2,10 @@ extends Node2D
 @onready var nova: Sprite2D = $NovaSprite
 @onready var task_panel = $TaskPanel
 @onready var speech_bubble = $SpeechBubble
+@onready var complete_sound = $CompleteSound
+@onready var level_up_sound = $LevelUpSound
+@onready var menu_sound = $MenuSound
+@onready var add_task_sound = $AddTaskSound
 var idle_texture = preload("res://assets/characters/nova/idle.png")
 var happy_texture = preload("res://assets/characters/nova/happy.png")
 var sad_texture = preload("res://assets/characters/nova/sad.png")
@@ -80,6 +84,7 @@ func _input(event):
 
 			if nova_rect.has_point(mouse_pos):
 				task_panel.visible = not task_panel.visible
+				play_menu_sound()
 func random_behavior():
 	var roll = randi_range(1, 100)
 
@@ -118,3 +123,13 @@ func say_message(message: String):
 func random_message():
 	var msg = messages[randi() % messages.size()]
 	say_message(msg)
+func play_complete_sound():
+	complete_sound.play()
+
+func play_levelup_sound():
+	level_up_sound.play()
+
+func play_menu_sound():
+	menu_sound.play()
+func play_add_task_sound():
+	add_task_sound.play()

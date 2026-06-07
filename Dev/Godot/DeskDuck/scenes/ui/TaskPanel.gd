@@ -6,6 +6,7 @@ extends Control
 @onready var add_button = $PanelContainer/VBoxContainer/AddButton
 @onready var task_list = $PanelContainer/VBoxContainer/TaskList
 @onready var close_button = $PanelContainer/VBoxContainer/CloseButton
+@onready var reset_button = $PanelContainer/VBoxContainer/ResetButton
 
 func _ready():
 	
@@ -14,7 +15,7 @@ func _ready():
 	add_button.pressed.connect(_on_add_button_pressed)
 	update_ui()
 	close_button.pressed.connect(_on_close_button_pressed)
-	
+	reset_button.pressed.connect(_on_reset_button_pressed)
 
 func update_ui():
 	title_label.text = "MISSION CONTROL"
@@ -44,8 +45,10 @@ func update_ui():
 			var leveled_up = TaskManager.complete_task(task["id"])
 
 			get_parent().show_happy()
+			get_parent().play_complete_sound()
 
 			if leveled_up:
+				get_parent().play_levelup_sound()
 				get_parent().say_message("¡Subiste de nivel! Recompensa obtenida.")
 			else:
 				get_parent().say_message("¡Misión completada! XP obtenida.")
@@ -65,8 +68,22 @@ func _on_add_button_pressed():
 		return
 
 	TaskManager.add_task(title)
+	get_parent().play_add_task_sound()
 	get_parent().say_message("Nueva misión registrada.")
 	task_input.text = ""
 	update_ui()
 func _on_close_button_pressed():
+	get_parent().play_menu_sound()
 	visible = false
+func _on_reset_button_pressed():
+	PlayerManager.level = 1
+	PlayerManager.xp = 0
+	PlayerManager.coins = 0
+
+	TaskManager.tasks.clear()
+
+	SaveManager.save_player()
+	SaveManager.save_tasks(TaskManager.tasks)
+
+	get_parent().say_message("Progreso reiniciado.")
+	update_ui()
