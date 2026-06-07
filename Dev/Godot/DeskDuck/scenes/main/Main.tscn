@@ -7,9 +7,9 @@
 [node name="Main" type="Node2D" unique_id=544002195]
 script = ExtResource("1_0wfyh")
 
-[node name="TaskPanel" parent="." unique_id=210172964 instance=ExtResource("3_q24mn")]
-
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1317044676]
+[node name="NovaSprite" type="Sprite2D" parent="." unique_id=1317044676]
 position = Vector2(330, 250)
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_gyg6b")
+
+[node name="TaskPanel" parent="." unique_id=210172964 instance=ExtResource("3_q24mn")]

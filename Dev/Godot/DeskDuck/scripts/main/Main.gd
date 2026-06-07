@@ -1,18 +1,81 @@
 extends Node2D
-@onready var nova = $Sprite2D
-
+@onready var nova: Sprite2D = $NovaSprite
+@onready var task_panel = $TaskPanel
 var idle_texture = preload("res://assets/characters/nova/idle.png")
 var happy_texture = preload("res://assets/characters/nova/happy.png")
 var sad_texture = preload("res://assets/characters/nova/sad.png")
+var direction = 1
+var speed = 40.0
+var behavior_timer = 0.0
+var behavior_interval = 4.0
+var is_happy = false
 
 func _ready():
 	nova.texture = idle_texture
 	SaveManager.load_player()
 	TaskManager.load_tasks()
+	task_panel.visible = false
+	randomize()
 	
 func show_happy():
+	is_happy = true
 	nova.texture = happy_texture
 
 	await get_tree().create_timer(3.0).timeout
 
+	is_happy = false
 	nova.texture = idle_texture
+func show_sad():
+	nova.texture = sad_texture
+func _process(delta):
+	if nova == null:
+		return
+
+	if is_happy:
+		return
+
+	nova.position.x += direction * speed * delta
+
+	if nova.position.x > 320:
+		direction = -1
+		nova.flip_h = true
+
+	if nova.position.x < 180:
+		direction = 1
+		nova.flip_h = false
+
+	behavior_timer += delta
+
+	if behavior_timer >= behavior_interval:
+		behavior_timer = 0.0
+		random_behavior()
+	
+func _input(event):
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			var mouse_pos = get_global_mouse_position()
+			var nova_rect = Rect2(
+				nova.global_position - (nova.texture.get_size() * nova.scale) / 2,
+				nova.texture.get_size() * nova.scale
+			)
+
+			if nova_rect.has_point(mouse_pos):
+				task_panel.visible = not task_panel.visible
+func random_behavior():
+	var roll = randi_range(1, 100)
+
+	if roll <= 50:
+		speed = 0
+		nova.texture = idle_texture
+
+	elif roll <= 80:
+		speed = 40
+		nova.texture = idle_texture
+
+	elif roll <= 90:
+		speed = 0
+		nova.texture = happy_texture
+
+	else:
+		speed = 0
+		nova.texture = sad_texture
