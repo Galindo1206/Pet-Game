@@ -13,3 +13,9 @@ scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_gyg6b")
 
 [node name="TaskPanel" parent="." unique_id=210172964 instance=ExtResource("3_q24mn")]
+
+[node name="SpeechBubble" type="Label" parent="." unique_id=42536893]
+custom_minimum_size = Vector2(140, 40)
+offset_right = 40.0
+offset_bottom = 23.0
+text = "💭 Hola, David."

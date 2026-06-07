@@ -1,21 +1,40 @@
 extends Node2D
 @onready var nova: Sprite2D = $NovaSprite
 @onready var task_panel = $TaskPanel
+@onready var speech_bubble = $SpeechBubble
 var idle_texture = preload("res://assets/characters/nova/idle.png")
 var happy_texture = preload("res://assets/characters/nova/happy.png")
 var sad_texture = preload("res://assets/characters/nova/sad.png")
+
 var direction = 1
 var speed = 40.0
 var behavior_timer = 0.0
 var behavior_interval = 4.0
 var is_happy = false
+var is_speaking = false
+var messages = [
+	"¿Seguimos programando?",
+	"¡Buen trabajo!",
+	"Nueva misión disponible.",
+	"Estás ganando XP.",
+	"No olvides tus objetivos.",
+	"Vamos, tú puedes.",
+	"Completa una tarea para ganar monedas.",
+	"Hoy podemos avanzar mucho.",
+	"Estoy orgullosa de tu progreso.",
+	"¿Qué construiremos hoy?"
+]
 
 func _ready():
 	nova.texture = idle_texture
+	
 	SaveManager.load_player()
 	TaskManager.load_tasks()
+	
 	task_panel.visible = false
+	speech_bubble.visible = false
 	randomize()
+	say_message("Hola, David.")
 	
 func show_happy():
 	is_happy = true
@@ -79,3 +98,23 @@ func random_behavior():
 	else:
 		speed = 0
 		nova.texture = sad_texture
+		
+	if randi_range(1, 100) <= 30:
+		random_message()
+		
+		
+func say_message(message: String):
+	if is_speaking:
+		return
+
+	is_speaking = true
+	speech_bubble.text = "💭 " + message
+	speech_bubble.visible = true
+
+	await get_tree().create_timer(3.0).timeout
+
+	speech_bubble.visible = false
+	is_speaking = false
+func random_message():
+	var msg = messages[randi() % messages.size()]
+	say_message(msg)

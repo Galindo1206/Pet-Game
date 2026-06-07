@@ -5,12 +5,16 @@ extends Control
 @onready var task_input = $PanelContainer/VBoxContainer/TaskInput
 @onready var add_button = $PanelContainer/VBoxContainer/AddButton
 @onready var task_list = $PanelContainer/VBoxContainer/TaskList
+@onready var close_button = $PanelContainer/VBoxContainer/CloseButton
 
 func _ready():
+	
 	SaveManager.load_player()
 	TaskManager.load_tasks()
 	add_button.pressed.connect(_on_add_button_pressed)
 	update_ui()
+	close_button.pressed.connect(_on_close_button_pressed)
+	
 
 func update_ui():
 	title_label.text = "MISSION CONTROL"
@@ -37,8 +41,15 @@ func update_ui():
 		checkbox.text = task["title"]
 
 		checkbox.pressed.connect(func():
-			TaskManager.complete_task(task["id"])
+			var leveled_up = TaskManager.complete_task(task["id"])
+
 			get_parent().show_happy()
+
+			if leveled_up:
+				get_parent().say_message("¡Subiste de nivel! Recompensa obtenida.")
+			else:
+				get_parent().say_message("¡Misión completada! XP obtenida.")
+
 			update_ui()
 		)
 
@@ -54,5 +65,8 @@ func _on_add_button_pressed():
 		return
 
 	TaskManager.add_task(title)
+	get_parent().say_message("Nueva misión registrada.")
 	task_input.text = ""
 	update_ui()
+func _on_close_button_pressed():
+	visible = false

@@ -16,8 +16,11 @@ func complete_task(task_id):
 	for task in tasks:
 		if task["id"] == task_id:
 			task["completed"] = true
-			PlayerManager.add_xp(50)
+			var leveled_up = PlayerManager.add_xp(50)
 			PlayerManager.add_coins(25)
+
+			return leveled_up
+			
 			SaveManager.save_tasks(tasks)
 			return
 
