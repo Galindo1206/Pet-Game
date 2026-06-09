@@ -48,3 +48,10 @@ text = "Cerrar"
 layout_mode = 2
 text = "Reset Progress
 "
+
+[node name="ShopButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=251135877]
+layout_mode = 2
+text = "Shop"
+
+[node name="ShopList" type="VBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=815055310]
+layout_mode = 2

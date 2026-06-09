@@ -7,6 +7,8 @@ extends Control
 @onready var task_list = $PanelContainer/VBoxContainer/TaskList
 @onready var close_button = $PanelContainer/VBoxContainer/CloseButton
 @onready var reset_button = $PanelContainer/VBoxContainer/ResetButton
+@onready var shop_button = $PanelContainer/VBoxContainer/ShopButton
+@onready var shop_list= $PanelContainer/VBoxContainer/ShopList
 
 func _ready():
 	
@@ -16,6 +18,8 @@ func _ready():
 	update_ui()
 	close_button.pressed.connect(_on_close_button_pressed)
 	reset_button.pressed.connect(_on_reset_button_pressed)
+	shop_button.pressed.connect(_on_shop_button_pressed)
+	shop_list.visible = false
 
 func update_ui():
 	title_label.text = "MISSION CONTROL"
@@ -46,9 +50,11 @@ func update_ui():
 
 			get_parent().show_happy()
 			get_parent().play_complete_sound()
+			get_parent().show_reward_popup("+50 XP\n+25 Monedas")
 
 			if leveled_up:
 				get_parent().play_levelup_sound()
+				get_parent().show_levelup_popup()
 				get_parent().say_message("¡Subiste de nivel! Recompensa obtenida.")
 			else:
 				get_parent().say_message("¡Misión completada! XP obtenida.")
@@ -87,3 +93,34 @@ func _on_reset_button_pressed():
 
 	get_parent().say_message("Progreso reiniciado.")
 	update_ui()
+func _on_shop_button_pressed():
+	shop_list.visible = not shop_list.visible
+	refresh_shop()
+func refresh_shop():
+	for child in shop_list.get_children():
+		child.queue_free()
+
+	for character_id in CharacterManager.get_all_characters().keys():
+		var character = CharacterManager.get_character(character_id)
+
+		var button = Button.new()
+
+		if character["unlocked"]:
+			button.text = character["name"] + " - Usar"
+		else:
+			button.text = character["name"] + " - " + str(character["price"]) + " monedas"
+
+		button.pressed.connect(func():
+			var success = CharacterManager.buy_character(character_id)
+
+			if success:
+				get_parent().apply_active_character()
+				get_parent().say_message("Personaje seleccionado.")
+			else:
+				get_parent().say_message("No tienes monedas suficientes.")
+
+			update_ui()
+			refresh_shop()
+		)
+
+		shop_list.add_child(button)

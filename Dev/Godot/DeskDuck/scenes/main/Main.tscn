@@ -35,3 +35,10 @@ stream = ExtResource("6_ko0rf")
 
 [node name="AddTaskSound" type="AudioStreamPlayer" parent="." unique_id=157824241]
 stream = ExtResource("7_sjxhf")
+
+[node name="RewardPopup" type="Label" parent="." unique_id=535136809]
+offset_left = 180.0
+offset_top = 90.0
+offset_right = 232.0
+offset_bottom = 113.0
+text = "+50 XP"

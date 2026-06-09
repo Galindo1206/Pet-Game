@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 PlayerManager="*uid://cswrehmeah275"
 SaveManager="*uid://ddjkdmhna1vdq"
 TaskManager="*res://scripts/managers/TaskManager.gd"
+CharacterManager="*uid://cdv6ra7dqh05k"
 
 [display]
 

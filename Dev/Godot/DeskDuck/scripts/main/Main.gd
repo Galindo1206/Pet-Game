@@ -6,6 +6,7 @@ extends Node2D
 @onready var level_up_sound = $LevelUpSound
 @onready var menu_sound = $MenuSound
 @onready var add_task_sound = $AddTaskSound
+@onready var reward_popup = $RewardPopup
 var idle_texture = preload("res://assets/characters/nova/idle.png")
 var happy_texture = preload("res://assets/characters/nova/happy.png")
 var sad_texture = preload("res://assets/characters/nova/sad.png")
@@ -37,8 +38,10 @@ func _ready():
 	
 	task_panel.visible = false
 	speech_bubble.visible = false
+	reward_popup.visible = false
 	randomize()
 	say_message("Hola, David.")
+	apply_active_character()
 	
 func show_happy():
 	is_happy = true
@@ -133,3 +136,50 @@ func play_menu_sound():
 	menu_sound.play()
 func play_add_task_sound():
 	add_task_sound.play()
+func show_reward_popup(text: String):
+	reward_popup.text = text
+	reward_popup.visible = true
+	reward_popup.modulate.a = 1.0
+
+	var start_position = reward_popup.position
+	var end_position = start_position + Vector2(0, -40)
+
+	var tween = create_tween()
+	tween.tween_property(reward_popup, "position", end_position, 1.2)
+	tween.parallel().tween_property(reward_popup, "modulate:a", 0.0, 1.2)
+
+	await tween.finished
+
+	reward_popup.visible = false
+	reward_popup.position = start_position
+	reward_popup.modulate.a = 1.0
+func show_levelup_popup():
+	reward_popup.text = "🎉 LEVEL UP! 🎉"
+	reward_popup.visible = true
+	reward_popup.modulate.a = 1.0
+
+	var start_position = reward_popup.position
+	var end_position = start_position + Vector2(0, -60)
+
+	var tween = create_tween()
+	tween.tween_property(reward_popup, "position", end_position, 2.0)
+	tween.parallel().tween_property(reward_popup, "scale", Vector2(1.5, 1.5), 0.5)
+	tween.parallel().tween_property(reward_popup, "modulate:a", 0.0, 2.0)
+
+	await tween.finished
+
+	reward_popup.visible = false
+	reward_popup.position = start_position
+	reward_popup.scale = Vector2(1, 1)
+	reward_popup.modulate.a = 1.0
+func apply_active_character():
+	var active = CharacterManager.active_character
+
+	if active == "nova_classic":
+		idle_texture = load("res://assets/characters/nova/classic/idle.png")
+	elif active == "nova_gold":
+		idle_texture = load("res://assets/characters/nova/gold/idle.png")
+	elif active == "nova_shadow":
+		idle_texture = load("res://assets/characters/nova/shadow/idle.png")
+
+	nova.texture = idle_texture
